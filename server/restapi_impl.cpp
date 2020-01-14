@@ -48,8 +48,8 @@ void RestApiImpl::addInterval(const Interval & interval, int64_t & id)
     std::string query = "INSERT INTO interval (name, _from, _to, days, active) VALUES (:name, :from, :to, :days, :active)";
     dbStatement.prepare(query);
     dbStatement.bind("name", interval.name);
-    dbStatement.bind("from", interval.from);
-    dbStatement.bind("to", interval.to);
+    dbStatement.bind("from", (int64_t)interval.from);
+    dbStatement.bind("to", (int64_t)interval.to);
     dbStatement.bind("days", interval.days);
     dbStatement.bind("active", interval.active);
     dbStatement.exec();
@@ -63,8 +63,8 @@ void RestApiImpl::modifyInterval(const Interval & interval)
     std::string query = "UPDATE interval SET name=:name, _from=:from, _to=:to, days=:days, active=:active WHERE id=:id";
     dbStatement.prepare(query);
     dbStatement.bind("name", interval.name);
-    dbStatement.bind("from", interval.from);
-    dbStatement.bind("to", interval.to);
+    dbStatement.bind("from", (int64_t)interval.from);
+    dbStatement.bind("to", (int64_t)interval.to);
     dbStatement.bind("days", interval.days);
     dbStatement.bind("active", interval.active);
     dbStatement.bind("id", interval.id);

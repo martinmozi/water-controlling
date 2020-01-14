@@ -196,8 +196,8 @@ JsonSerialization::Variant RestApi::intervalList(const JsonSerialization::Varian
         {
             { "id", interval.id },
 	        { "name", interval.name },
-            { "from", interval.from },
-            { "to", interval.to },
+            { "from", (int64_t)interval.from },
+            { "to", (int64_t)interval.to },
             { "days", interval.days },
 	        { "active", interval.active },
 	        { "gpioIndex", interval.gpioIndex }

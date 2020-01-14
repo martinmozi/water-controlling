@@ -3,36 +3,54 @@
 #include <stdexcept>
 
 #ifdef RASPBERRY_PI
-    #include <wiringPi.h>
+#include <bcm2835.h>
 #endif
+
+Gpio& Gpio::instance()
+{
+    static Gpio g;
+    return g;
+}
 
 Gpio::Gpio()
 {
 #ifdef RASPBERRY_PI
-	if (wiringPiSetup() == -1)
-	{
-		// some log
-		throw std::runtime_error("Unable to initialize wiring PI");
-	}
-
-	pinMode(0, OUTPUT);
+    if (!bcm2835_init())
+    {
+        Log::error("Unable to initialize bcm2835 library");
+        exit(-1);
+    }
 #endif
 }
 
-bool Gpio::getPin(int index)
+Gpio::~Gpio()
 {
 #ifdef RASPBERRY_PI
-	return (digitalRead(index) == 1);
+    bcm2835_close();
 #endif
-	
-	return true;
 }
 
-void Gpio::setPin(int index, bool on)
+void Gpio::setPinMode(int index, PinMode pinMode)
 {
-    int state = (on == true) ? 1 : 0;
-    Log::info("Set state of pin %d to %d", index, state);
 #ifdef RASPBERRY_PI
-	digitalWrite(index, state);
+    bcm2835_gpio_fsel(index , pinMode == PinMode::In ? BCM2835_GPIO_FSEL_INPT : BCM2835_GPIO_FSEL_OUTP);
+#endif
+}
+
+bool Gpio::pinValue(int index)
+{
+#ifdef RASPBERRY_PI
+    uint8_t value = bcm2835_gpio_lev(index);
+    return (value > 0);
+#endif
+
+    return true;
+}
+
+void Gpio::setPinValue(int index, bool on)
+{
+#ifdef RASPBERRY_PI
+    bcm2835_gpio_write(index, on ? HIGH : LOW);
+    // bcm2835_delay(500);
 #endif
 }

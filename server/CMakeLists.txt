@@ -25,7 +25,7 @@ add_executable(Zavlaha
 
 set(AdditionalLibs ${RESTAPISERVER_LIBRARIES} ${Boost_LIBRARIES} -lpthread -ldl)
 if (RASPBERRY_PI)
-	set(AdditionalLibs "${AdditionalLibs}" "${wiringPi}")
+	set(AdditionalLibs "${AdditionalLibs}" "bcm2835")
 	add_definitions(-DRASPBERRY_PI)
 endif()
 

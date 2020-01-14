@@ -1,7 +1,6 @@
 #pragma once
 
 #include "interval.h"
-#include "gpio.h"
 #include "storage.h"
 #include <set>
 #include <atomic>
@@ -21,7 +20,6 @@ private:
     void work();
 
 private:
-    Gpio gpio_;
     std::vector<Interval> intervalVector_;
 	std::map<int, GpioStatus> gpioStatuses;
     std::mutex mutex_;

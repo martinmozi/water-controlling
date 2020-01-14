@@ -1,4 +1,5 @@
 #include "water_manager.h"
+#include "gpio.h"
 
 WaterManager::WaterManager()
 :   stop_(false),
@@ -23,15 +24,16 @@ void WaterManager::setGpioStatus(int index, GpioStatus gpioStatus)
 {
     std::lock_guard<std::mutex> lock(mutex_);
 
+    // add ranges for pins and set firstly these pins as output
 	gpioStatuses[index] = gpioStatus;
 	switch (gpioStatus)
 	{
 	case GpioStatus::Enabled:
-		gpio_.setPin(index, true);
+		Gpio::instance().setPinValue(index, true);
 		break;
 		
 	case GpioStatus::Disabled:
-		gpio_.setPin(index, false);
+        Gpio::instance().setPinValue(index, false);
 		break;
 		
 	default:
